@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Content</title>
+    <link rel="stylesheet" href="addcontent_style.css">
+</head>
+<body>
+
+    <!-- Content Form -->
+    <div class="add-content-form">
+        <h1>Content</h1>
+        <form id="contentForm">
+            <input type="text" id="title" placeholder="Enter Title" required><br>
+            <textarea id="content" placeholder="Enter Content" required></textarea><br>
+            <button type="submit">Add Content</button>
+        </form>
+    </div>
+
+    <!-- Image Form -->
+    <div class="add-content-form">
+        <h1>Image</h1>
+        <form id="imageForm">
+            <input type="text" id="imageUrl" placeholder="Enter Image URL" required><br>
+            <button type="submit">Add Image</button>
+        </form>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
+    <script>
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyC4goQXBFiCXrJv715ZQ8DfzG27w7KHkjU",
+            authDomain: "fujiwara-2c925.firebaseapp.com",
+            projectId: "fujiwara-2c925",
+            storageBucket: "fujiwara-2c925.firebasestorage.app",
+            messagingSenderId: "846326685482",
+            appId: "1:846326685482:web:4ea480b3a99a98a7d9c853",
+            measurementId: "G-4XK8PP0Q7C",
+            databaseURL: "https://fujiwara-2c925-default-rtdb.asia-southeast1.firebasedatabase.app"  // Updated URL
+        };
+
+        // Initialize Firebase
+        const app = firebase.initializeApp(firebaseConfig);
+        const database = firebase.database(app);
+
+        // Handle Content Form Submission
+        const contentForm = document.getElementById('contentForm');
+        contentForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const title = document.getElementById('title').value;
+            const content = document.getElementById('content').value;
+
+            // Save content data to Firebase Realtime Database
+            const newContentRef = database.ref('contents').push();
+            newContentRef.set({
+                title: title,
+                content: content
+            }).then(() => {
+                alert("Content added successfully!");
+                contentForm.reset();
+            }).catch((error) => {
+                alert("Error: " + error.message);
+            });
+        });
+
+        // Handle Image Form Submission
+        const imageForm = document.getElementById('imageForm');
+        imageForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const imageUrl = document.getElementById('imageUrl').value;
+
+            // Save image URL data to Firebase Realtime Database
+            const newImageRef = database.ref('images').push();
+            newImageRef.set({
+                imageUrl: imageUrl
+            }).then(() => {
+                alert("Image added successfully!");
+                imageForm.reset();
+            }).catch((error) => {
+                alert("Error: " + error.message);
+            });
+        });
+
+    </script>
+
+</body>
+</html>
