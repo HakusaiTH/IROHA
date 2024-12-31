@@ -4,11 +4,76 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Content</title>
-    <link rel="stylesheet" href="addcontent_style.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        .add-content-form {
+            background-color: white;
+            padding: 20px;
+            max-width: 600px;
+            margin: 20px auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .add-content-form h1 {
+            text-align: center;
+        }
+
+        .add-content-form input, 
+        .add-content-form textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+        }
+
+        .add-content-form button {
+            width: 100%;
+            padding: 10px;
+            background-color: #30a464;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .add-content-form button:hover {
+            background-color: #2a8c53;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .content-item {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .content-item img {
+            width: 100%;
+            height: auto;
+            border-radius: 4px;
+            margin-top: 10px;
+        }
+
+    </style>
 </head>
 <body>
 
-    <!-- Content Form -->
     <div class="add-content-form">
         <h1>Content</h1>
         <form id="contentForm">
@@ -18,7 +83,6 @@
         </form>
     </div>
 
-    <!-- Image Form -->
     <div class="add-content-form">
         <h1>Image</h1>
         <form id="imageForm">
@@ -31,7 +95,7 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
     <script>
-        // Firebase Configuration
+
         const firebaseConfig = {
             apiKey: "AIzaSyC4goQXBFiCXrJv715ZQ8DfzG27w7KHkjU",
             authDomain: "fujiwara-2c925.firebaseapp.com",
@@ -40,26 +104,32 @@
             messagingSenderId: "846326685482",
             appId: "1:846326685482:web:4ea480b3a99a98a7d9c853",
             measurementId: "G-4XK8PP0Q7C",
-            databaseURL: "https://fujiwara-2c925-default-rtdb.asia-southeast1.firebasedatabase.app"  // Updated URL
+            databaseURL: "https://fujiwara-2c925-default-rtdb.asia-southeast1.firebasedatabase.app"  
         };
 
-        // Initialize Firebase
         const app = firebase.initializeApp(firebaseConfig);
         const database = firebase.database(app);
 
-        // Handle Content Form Submission
+        function getCurrentDateTime() {
+            const now = new Date();
+            const date = now.toLocaleDateString(); 
+            const time = now.toLocaleTimeString(); 
+            return `${date} ${time}`;
+        }
+
         const contentForm = document.getElementById('contentForm');
         contentForm.addEventListener('submit', function(event) {
             event.preventDefault();
 
             const title = document.getElementById('title').value;
             const content = document.getElementById('content').value;
+            const dateTime = getCurrentDateTime(); 
 
-            // Save content data to Firebase Realtime Database
             const newContentRef = database.ref('contents').push();
             newContentRef.set({
                 title: title,
-                content: content
+                content: content,
+                dateTime: dateTime 
             }).then(() => {
                 alert("Content added successfully!");
                 contentForm.reset();
@@ -68,17 +138,17 @@
             });
         });
 
-        // Handle Image Form Submission
         const imageForm = document.getElementById('imageForm');
         imageForm.addEventListener('submit', function(event) {
             event.preventDefault();
 
             const imageUrl = document.getElementById('imageUrl').value;
+            const dateTime = getCurrentDateTime(); 
 
-            // Save image URL data to Firebase Realtime Database
             const newImageRef = database.ref('images').push();
             newImageRef.set({
-                imageUrl: imageUrl
+                imageUrl: imageUrl,
+                dateTime: dateTime 
             }).then(() => {
                 alert("Image added successfully!");
                 imageForm.reset();

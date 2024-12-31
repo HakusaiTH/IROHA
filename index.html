@@ -4,17 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
-    <title>Document</title>
+    <title>藤原 彩葉</title>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h4>IROHA</h4>
+            <h3>藤原 彩葉</h3>
         </div>
         <div class="container_bg">
             <div class="image-wrapper">
                 <img src="/image/1695450254130.jpg" alt="Snow">
-                <div class="overlay"></div> <!-- ชั้น overlay -->
+                <div class="overlay"></div> 
             </div>
             <div class="top-left">
                 <h3>
@@ -33,7 +33,7 @@
             <div class="anniversary_day">
                 <p>Anniversary Countdown</p>
                 <div id="anniversaryCountdown"></div>
-                <p>Anniversary in <span id="anniversaryYears"></span></p> <!-- แสดงปีครบรอบ -->
+                <p>Anniversary in <span id="anniversaryYears"></span></p> 
             </div>
         </div>
         
@@ -44,36 +44,11 @@
             <h1>MEMMORY</h1>
         </div>
 
+        <div class="grid-item-all" id="gridItemAll"></div> 
+
         <div class="content_paper">
-            <div class="grid-container">
-                <div class="grid-item">
-                    <h3>Title 1</h3>
-                    <p>Content for grid item 1. This is an example of the first content box.</p>
-                </div>
-                <div class="grid-item">
-                    <h3>Title 2</h3>
-                    <p>Content for grid item 2. This is an example of the second content box.</p>
-                </div>
-                <div class="grid-item">
-                    <h3>Title 3</h3>
-                    <p>Content for grid item 3. This is an example of the third content box.</p>
-                </div>
-                <div class="grid-item">
-                    <h3>Title 4</h3>
-                    <p>Content for grid item 4. This is an example of another content box.</p>
-                </div>
-                <div class="grid-item">
-                    <h3>Title 5</h3>
-                    <p>Content for grid item 5. This is an example of another content box.</p>
-                </div>
-                <div class="grid-item">
-                    <h3>Title 6</h3>
-                    <p>Content for grid item 6. This is an example of another content box.</p>
-                </div>
-                <div class="grid-item">
-                    <h3>Title 6</h3>
-                    <p>Content for grid item 6. This is an example of another content box.</p>
-                </div>
+            <div class="grid-container" id="contentGrid">
+
             </div>
         </div>
         <div class="text_haed">
@@ -81,25 +56,8 @@
         </div>
 
         <div class="content_image">
-            <div class="grid-container-images">
-                <div class="grid-item-image">
-                    <img src="/image/1695450221555.jpg" alt="Image 1">
-                </div>
-                <div class="grid-item-image">
-                    <img src="/image/1695450221555.jpg" alt="Image 2">
-                </div>
-                <div class="grid-item-image">
-                    <img src="/image/1695450221555.jpg" alt="Image 3">
-                </div>
-                <div class="grid-item-image">
-                    <img src="/image/1695450221555.jpg" alt="Image 4">
-                </div>
-                <div class="grid-item-image">
-                    <img src="/image/1695450221555.jpg" alt="Image 5">
-                </div>
-                <div class="grid-item-image">
-                    <img src="/image/1695450221555.jpg" alt="Image 6">
-                </div>
+            <div class="grid-container-images" id="imageGrid">
+
             </div>
         </div>   
 
@@ -107,6 +65,9 @@
             <p>© 2024 Fujiwara Aoyama.</p>
         </div>     
     </div>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
