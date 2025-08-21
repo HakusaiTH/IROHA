@@ -1,3 +1,70 @@
+/** ==== CONFIG: กำหนดวันเกิด/วันครบรอบ ==== */
+const BIRTH = { year: 2006, monthIndex: 11, day: 23 };     // 23/12/2006  (เดือนเริ่มที่ 0 → 11 = ธันวาคม)
+const ANNIV = { year: 2021, monthIndex: 10, day: 19 };     // 19/11/2022  (10 = พฤศจิกายน)
+
+/** ==== Utilities ==== */
+function nextOccurrence(monthIndex, day, now = new Date()) {
+  // เป้าหมายคือ 00:00:00 ของวันนั้นตามเวลาเครื่องผู้ใช้
+  let target = new Date(now.getFullYear(), monthIndex, day, 0, 0, 0, 0);
+  if (target <= now) target = new Date(now.getFullYear() + 1, monthIndex, day, 0, 0, 0, 0);
+  return target;
+}
+
+function formatDuration(ms) {
+  if (ms <= 0) return "วันนี้!";
+  const totalSeconds = Math.floor(ms / 1000);
+  const days = Math.floor(totalSeconds / 86400);
+  const hours = Math.floor((totalSeconds % 86400) / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = totalSeconds % 60;
+  return `${days} Days, ${hours} Hours, ${minutes} Minutes, ${seconds} Seconds`;
+}
+
+function calcAge(birth, now = new Date()) {
+  let age = now.getFullYear() - birth.year;
+  const thisYearBirthday = new Date(now.getFullYear(), birth.monthIndex, birth.day, 0, 0, 0, 0);
+  if (now < thisYearBirthday) age--;
+  return Math.max(age, 0);
+}
+
+function calcYearsTogether(start, now = new Date()) {
+  let years = now.getFullYear() - start.year;
+  const thisYearAnniv = new Date(now.getFullYear(), start.monthIndex, start.day, 0, 0, 0, 0);
+  if (now < thisYearAnniv) years--;
+  return Math.max(years, 0);
+}
+
+/** ==== Main Tick ==== */
+function tickCountdowns() {
+  const now = new Date();
+
+  // Birthday
+  const nextBDay = nextOccurrence(BIRTH.monthIndex, BIRTH.day, now);
+  const bDayMs = nextBDay - now;
+  const age = calcAge(BIRTH, now);
+
+  const birthdayCountdownEl = document.getElementById('birthdayCountdown');
+  const ageEl = document.getElementById('age');
+  if (birthdayCountdownEl) birthdayCountdownEl.innerText = formatDuration(bDayMs);
+  if (ageEl) ageEl.innerText = age;
+
+  // Anniversary
+  const nextAnniv = nextOccurrence(ANNIV.monthIndex, ANNIV.day, now);
+  const annivMs = nextAnniv - now;
+  const yearsTogether = calcYearsTogether(ANNIV, now);
+
+  const anniversaryCountdownEl = document.getElementById('anniversaryCountdown');
+  const anniversaryYearsEl = document.getElementById('anniversaryYears');
+  if (anniversaryCountdownEl) anniversaryCountdownEl.innerText = formatDuration(annivMs);
+  if (anniversaryYearsEl) anniversaryYearsEl.innerText = `${yearsTogether} Years`;
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  tickCountdowns();              // อัปเดตทันทีเมื่อโหลดหน้า
+  setInterval(tickCountdowns, 1000);  // อัปเดตทุกวินาที (แสดงวินาทีด้วย)
+});
+
+
 const firebaseConfig = {
     apiKey: "AIzaSyC4goQXBFiCXrJv715ZQ8DfzG27w7KHkjU",
     authDomain: "fujiwara-2c925.firebaseapp.com",
@@ -59,65 +126,4 @@ imageRef.on('value', function(snapshot) {
         imageItem.innerHTML = `<img src="${data.imageUrl}" alt="Image">`;
         imageGrid.appendChild(imageItem);
     });
-});
-
-document.addEventListener("DOMContentLoaded", function() {
-    const currentDate = new Date();
-
-    const birthDate = new Date('2006-12-23T00:00:00');
-    const anniversaryDate = new Date('2022-11-19T00:00:00');
-
-    function calculateAge(birthDate, currentDate) {
-        let age = currentDate.getFullYear() - birthDate.getFullYear();
-        const m = currentDate.getMonth() - birthDate.getMonth();
-        if (m < 0 || (m === 0 && currentDate.getDate() < birthDate.getDate())) {
-            age--;
-        }
-        return age;
-    }
-
-    function formatTime(ms) {
-        const days = Math.floor(ms / (1000 * 60 * 60 * 24));
-        const months = Math.floor(days / 30);
-        const hours = Math.floor((ms % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const minutes = Math.floor((ms % (1000 * 60 * 60)) / (1000 * 60));
-
-        return `${days} Days, ${months} Months, ${hours} Hours, ${minutes} Minutes`;
-    }
-
-    function updateBirthdayCountdown() {
-        const nextBirthday = new Date(birthDate);
-        if (nextBirthday <= currentDate) {
-            nextBirthday.setFullYear(currentDate.getFullYear() + 1);
-        }
-
-        const birthdayDifference = nextBirthday - currentDate;
-        const birthdayTime = formatTime(birthdayDifference);
-        document.getElementById('birthdayCountdown').innerText = birthdayTime;
-
-        const age = calculateAge(birthDate, currentDate);
-        document.getElementById('age').innerText = age;
-    }
-
-    function updateAnniversaryCountdown() {
-        const nextAnniversary = new Date(anniversaryDate);
-        if (nextAnniversary <= currentDate) {
-            nextAnniversary.setFullYear(currentDate.getFullYear() + 1);
-        }
-
-        const anniversaryDifference = nextAnniversary - currentDate;
-        const anniversaryTime = formatTime(anniversaryDifference);
-        document.getElementById('anniversaryCountdown').innerText = anniversaryTime;
-
-        const yearsToAnniversary = Math.floor((nextAnniversary - anniversaryDate) / (1000 * 60 * 60 * 24 * 365.25));
-        document.getElementById('anniversaryYears').innerText = yearsToAnniversary + " Years";
-    }
-
-    updateBirthdayCountdown();
-    updateAnniversaryCountdown();
-
-    setInterval(function() {
-        updateBirthdayCountdown();
-        updateAnniversaryCountdown();
-    }, 60000);
 });
